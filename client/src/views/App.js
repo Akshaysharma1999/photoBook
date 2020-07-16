@@ -7,10 +7,18 @@ import history from './history';
 import toaster from '../utils/toaster';
 import ProtectedRoute from '../utils/protectedRoute';
 import Home from './Home';
+import Signup from './Signup';
+import Login from './Login';
+import Profile from './Profile';
+import CreatePost from './CreatePost';
 
 const AppRoutes = ({ store }) => (
   <Switch>
     <Route path="/" exact component={Home} />
+    <Route path="/login" exact component={Login} />
+    <Route path="/signup" exact component={Signup} />
+    <ProtectedRoute path="/profile" exact component={Profile}/>
+    <ProtectedRoute path="/createPost" exact component={CreatePost}/>
     <Route path="*" component={() => '404 not found'} />
   </Switch>
 );

@@ -1,10 +1,38 @@
-import {} from '../actions/types';
+import { ERROR, SUCCESS, LOG_IN, LOG_OUT } from '../actions/types';
 
 const INITIAL_STATE = {
   errors: [],
   success: [],
+  user_data: null,
+  isLogedIn: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
-  return { ...state };
+  if (action.type === ERROR) {
+    return { ...state, errors: [action.payload], success: [] };
+  } else if (action.type === SUCCESS) {
+    return {
+      ...state,
+      success: [action.payload],
+      errors: [],
+    };
+  } else if (action.type === LOG_IN) {
+    return {
+      ...state,
+      user_data: action.payload,
+      errors: [],
+      success: [action.payload.message],
+      isLogedIn: true,
+    };
+  } else if (action.type === LOG_OUT) {
+    return {
+      ...state,
+      errors: [],
+      success: [],
+      user_data: null,
+      isLogedIn: false,
+    };
+  } else {
+    return { ...state };
+  }
 };
