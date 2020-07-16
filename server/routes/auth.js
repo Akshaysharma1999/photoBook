@@ -6,7 +6,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../keys");
 
-
 /**
  * Route for creating user
  */
@@ -54,6 +53,7 @@ route.post("/signin", (req, res) => {
     if (!savedUser) {
       return res.status(422).json({ error: "Invalid Email or Password" });
     }
+
     bcrypt
       .compare(password, savedUser.password)
       .then((isMatched) => {
@@ -62,6 +62,8 @@ route.post("/signin", (req, res) => {
           res.json({
             token: token,
             message: "Successfully Signed In ",
+            name: savedUser.name,
+            email: savedUser.email,
           });
         } else {
           return res.status(422).json({ error: "Invalid Email or Password" });

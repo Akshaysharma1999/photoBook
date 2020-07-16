@@ -1,8 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import './style.css';
+import { getMyAllPosts } from '../../services/store/actions';
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    props.getMyAllPosts();
+  }
+  renderMyPosts = () => {
+    if (this.props.user && this.props.user.myAllPosts) {
+      return this.props.user.myAllPosts.map(post => {
+        return <img className="imgItem" src={post.photo}></img>;
+      });
+    }
+  };
   render() {
     return (
       <div>
@@ -29,7 +42,7 @@ class Profile extends React.Component {
               ></img>
             </div>
             <div>
-              <h1 className>Akshay Sharma</h1>
+              <h1 className>{this.props.user.user_data.name}</h1>
               <div
                 style={{
                   display: 'flex',
@@ -51,49 +64,14 @@ class Profile extends React.Component {
           </div>
           {/* gallery */}
           <div className="ui segment">
-            <div className="gallery">
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-              <img
-                className="imgItem"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              ></img>
-            </div>
+            <div className="gallery">{this.renderMyPosts()}</div>
           </div>
         </div>
       </div>
     );
   }
 }
-
-export default Profile;
+const mapStateToProps = state => {
+  return { ...state };
+};
+export default connect(mapStateToProps, { getMyAllPosts })(Profile);

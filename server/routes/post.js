@@ -36,6 +36,7 @@ route.get("/allposts", (req, res) => {
   Post.find()
     .populate("postedBy", "_id name")
     .then((posts) => {
+      posts.reverse();
       res.json({ posts: posts });
     })
     .catch((err) => {

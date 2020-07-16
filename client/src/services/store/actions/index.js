@@ -1,5 +1,5 @@
 import history from '../../../views/history';
-import { LOG_IN, ERROR, SUCCESS } from './types';
+import { LOG_IN, ERROR, SUCCESS, ALLPOSTS , MYALLPOSTS } from './types';
 import api from '../../api';
 import imageToCloud from '../../api/imageToCloud';
 import setToken from '../../../utils/setToken';
@@ -57,9 +57,8 @@ export const logout = params => {
 };
 
 /**
- * action to make api request for image upload to cloud
+ * action to make api request for image upload to cloud and then create post
  */
-
 export const createPost = formValues => {
   return (dispatch, getState) => {
     imageToCloud
@@ -78,6 +77,39 @@ export const createPost = formValues => {
           .catch(error => {
             errorHandler(error, dispatch, ERROR);
           });
+      })
+      .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to get all public posts
+ */
+export const getAllPosts = formValues => {
+  return (dispatch, getState) => {
+    api
+      .get('/allposts')
+      .then(response => {
+        dispatch({ type: ALLPOSTS, payload: response.data });
+      })
+      .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to get all posts by user
+ */
+export const getMyAllPosts = formValues => {
+  return (dispatch, getState) => {
+    api
+      .get('/myallposts')
+      .then(response => {
+        console.log(response)
+        dispatch({ type: MYALLPOSTS, payload: response.data });
       })
       .catch(error => {
         errorHandler(error, dispatch, ERROR);
