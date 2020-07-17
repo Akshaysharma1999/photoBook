@@ -5,3 +5,4 @@ export const TOKEN_EXPIRE = 'TOKEN_EXPIRE';
 export const LOG_OUT = 'LOG_OUT';
 export const ALLPOSTS = 'ALLPOSTS';
 export const MYALLPOSTS = 'MYALLPOSTS';
+

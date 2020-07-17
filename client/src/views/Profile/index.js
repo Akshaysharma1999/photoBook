@@ -12,7 +12,7 @@ class Profile extends React.Component {
   renderMyPosts = () => {
     if (this.props.user && this.props.user.myAllPosts) {
       return this.props.user.myAllPosts.map(post => {
-        return <img className="imgItem" src={post.photo}></img>;
+        return <img key={post._id} className="imgItem" src={post.photo}></img>;
       });
     }
   };

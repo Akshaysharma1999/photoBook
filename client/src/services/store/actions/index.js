@@ -1,5 +1,5 @@
 import history from '../../../views/history';
-import { LOG_IN, ERROR, SUCCESS, ALLPOSTS , MYALLPOSTS } from './types';
+import { LOG_IN, ERROR, SUCCESS, ALLPOSTS, MYALLPOSTS } from './types';
 import api from '../../api';
 import imageToCloud from '../../api/imageToCloud';
 import setToken from '../../../utils/setToken';
@@ -108,10 +108,83 @@ export const getMyAllPosts = formValues => {
     api
       .get('/myallposts')
       .then(response => {
-        console.log(response)
+        // console.log(response)
         dispatch({ type: MYALLPOSTS, payload: response.data });
       })
       .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to like a post
+ */
+export const likePost = postId => {
+  return (dispatch, getState) => {
+    api
+      .put('/like', { postId: postId })
+      .then(response => {
+        let newArr = getState().posts.allposts.map(post => {
+          if (post._id === response.data._id) {
+            return response.data;
+          } else {
+            return post;
+          }
+        });
+        dispatch({ type: ALLPOSTS, payload: { posts: newArr } });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to unlike a post
+ */
+export const unLikePost = postId => {
+  return (dispatch, getState) => {
+    api
+      .put('/unlike', { postId: postId })
+      .then(response => {
+        let newArr = getState().posts.allposts.map(post => {
+          if (post._id === response.data._id) {
+            return response.data;
+          } else {
+            return post;
+          }
+        });
+        dispatch({ type: ALLPOSTS, payload: { posts: newArr } });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to make a comment
+ */
+export const makeComment = (postId, text) => {
+  return (dispatch, getState) => {
+    api
+      .put('/comment', { text: text, postId: postId })
+      .then(response => {
+        // console.log(response);
+        let newArr = getState().posts.allposts.map(post => {
+          if (post._id === response.data._id) {
+            return response.data;
+          } else {
+            return post;
+          }
+        });
+        dispatch({ type: ALLPOSTS, payload: { posts: newArr } });
+      })
+      .catch(error => {
+        console.log(error);
         errorHandler(error, dispatch, ERROR);
       });
   };

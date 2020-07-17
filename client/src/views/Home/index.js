@@ -1,13 +1,91 @@
 import React from 'react';
 import Navbar from '../../components/Navbar';
 import { connect } from 'react-redux';
-import { getAllPosts } from '../../services/store/actions';
+import {
+  getAllPosts,
+  likePost,
+  unLikePost,
+  makeComment,
+} from '../../services/store/actions';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     props.getAllPosts();
   }
+  setLikeClass = post => {
+    let b = false;
+    post.likes.map(user => {
+      if (user === this.props.user.user_data._id) {
+        b = true;
+      }
+    });
+    if (b === true) {
+      return 'heart red icon';
+    } else {
+      return 'heart outline like icon';
+    }
+  };
+  likeClick = (e, postId) => {
+    // console.log(e.target.className)
+    if (e.target.className === 'heart red icon') {
+      this.props.unLikePost(postId);
+    } else {
+      this.props.likePost(postId);
+    }
+  };
+  renderLike = post => {
+    if (this.props.user && this.props.user.isLogedIn) {
+      return (
+        <span class="right floated">
+          <i
+            className={this.setLikeClass(post)}
+            onClick={e => this.likeClick(e, post._id)}
+          ></i>
+          {post.likes.length} likes
+        </span>
+      );
+    } else {
+      return (
+        <span class="right floated">
+          <i className="heart outline icon"></i>
+          {post.likes.length} likes
+        </span>
+      );
+    }
+  };
+
+  renderComments = post => {
+    if (this.props.user && this.props.user.isLogedIn) {
+      return (
+        <div class="extra content">
+          <div class="ui large transparent left icon input">
+            <i class="pencil alternate icon"></i>
+            <input
+              type="text"
+              placeholder="Add Comment..."
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  this.props.makeComment(post._id, e.target.value);
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+  };
+
+  renderCommentsByUser = post => {
+    return post.comments.map(comment => {
+      return (
+        <div>
+          <b>{comment.postedBy.name}</b> : {comment.text}
+        </div>
+      );
+    });
+  };
   renderPosts = () => {
     if (this.props.posts && this.props.posts.allposts) {
       return this.props.posts.allposts.map(post => {
@@ -33,19 +111,11 @@ class Home extends React.Component {
               <div class="meta">
                 <span class="date">{post.body}</span>
               </div>
-              <span class="right floated">
-                <i class="heart outline like icon"></i>
-                17 likes
-              </span>
-              <i class="comment icon"></i>3 comments
+              {this.renderLike(post)}
+              {post.comments.length} Comments
+              {this.renderCommentsByUser(post)}
             </div>
-
-            <div class="extra content">
-              <div class="ui large transparent left icon input">
-                <i class="heart outline icon"></i>
-                <input type="text" placeholder="Add Comment..." />
-              </div>
-            </div>
+            {this.renderComments(post)}
           </div>
         );
       });
@@ -61,7 +131,12 @@ class Home extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  console.log(state)
+  // console.log(state);
   return { ...state };
 };
-export default connect(mapStateToProps, { getAllPosts })(Home);
+export default connect(mapStateToProps, {
+  getAllPosts,
+  likePost,
+  unLikePost,
+  makeComment,
+})(Home);

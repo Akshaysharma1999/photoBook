@@ -64,6 +64,7 @@ route.post("/signin", (req, res) => {
             message: "Successfully Signed In ",
             name: savedUser.name,
             email: savedUser.email,
+            _id: savedUser._id,
           });
         } else {
           return res.status(422).json({ error: "Invalid Email or Password" });

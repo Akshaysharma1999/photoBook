@@ -35,6 +35,7 @@ route.post("/createpost", requireLogin, (req, res) => {
 route.get("/allposts", (req, res) => {
   Post.find()
     .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
     .then((posts) => {
       posts.reverse();
       res.json({ posts: posts });
@@ -50,11 +51,72 @@ route.get("/allposts", (req, res) => {
 route.get("/myallposts", requireLogin, (req, res) => {
   Post.find({ postedBy: req.user._id })
     .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
     .then((posts) => {
+      posts.reverse();
       res.json({ posts: posts });
     })
     .catch((err) => {
       console.log(err);
     });
 });
+
+/**
+ * Route to like a post
+ */
+route.put("/like", requireLogin, (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    { $push: { likes: req.user._id } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+/**
+ * Route to unlike a post
+ */
+route.put("/unlike", requireLogin, (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    { $pull: { likes: req.user._id } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+/**
+ * Route to comment on a post
+ */
+route.put("/comment", requireLogin, (req, res) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id,
+  };
+
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    { $push: { comments: comment } },
+    { new: true }
+  )
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+});
+
 module.exports = route;

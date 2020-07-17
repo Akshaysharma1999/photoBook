@@ -5,12 +5,12 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-  if (action.type === ALLPOSTS) {
+  if (action.type === ALLPOSTS) {   
     return {
       ...state,
       allposts: action.payload.posts,
     };
-  }else {
+  } else {
     return { ...state };
   }
 };
