@@ -11,6 +11,7 @@ import Signup from './Signup';
 import Login from './Login';
 import Profile from './Profile';
 import CreatePost from './CreatePost';
+import UserProfile from './UserProfile';
 
 const AppRoutes = ({ store }) => (
   <Switch>
@@ -19,6 +20,7 @@ const AppRoutes = ({ store }) => (
     <Route path="/signup" exact component={Signup} />
     <ProtectedRoute path="/profile" exact component={Profile}/>
     <ProtectedRoute path="/createPost" exact component={CreatePost}/>
+    <Route path="/userProfile/:id"  component={UserProfile}/>
     <Route path="*" component={() => '404 not found'} />
   </Switch>
 );

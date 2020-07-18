@@ -1,5 +1,12 @@
 import history from '../../../views/history';
-import { LOG_IN, ERROR, SUCCESS, ALLPOSTS, MYALLPOSTS } from './types';
+import {
+  LOG_IN,
+  ERROR,
+  SUCCESS,
+  ALLPOSTS,
+  MYALLPOSTS,
+  USERPROFILE,
+} from './types';
 import api from '../../api';
 import imageToCloud from '../../api/imageToCloud';
 import setToken from '../../../utils/setToken';
@@ -182,6 +189,48 @@ export const makeComment = (postId, text) => {
           }
         });
         dispatch({ type: ALLPOSTS, payload: { posts: newArr } });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to delete a post
+ */
+export const deletePost = postId => {
+  return (dispatch, getState) => {
+    api
+      .delete(`/deletepost/${postId}`)
+      .then(response => {
+        // console.log(response);
+        let newArr = getState().posts.allposts.filter(post => {
+          if (post._id !== postId) {
+            return post;
+          }
+        });
+        // console.log(newArr)
+        dispatch({ type: ALLPOSTS, payload: { posts: newArr } });
+        dispatch({ type: SUCCESS, payload: response.data.message });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to get user profile
+ */
+export const getProfile = userId => {
+  return (dispatch, getState) => {
+    api
+      .get(`/user/${userId}`)
+      .then(response => {
+        dispatch({ type: USERPROFILE, payload: response.data });
       })
       .catch(error => {
         console.log(error);

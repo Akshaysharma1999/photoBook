@@ -69,13 +69,16 @@ route.put("/like", requireLogin, (req, res) => {
     req.body.postId,
     { $push: { likes: req.user._id } },
     { new: true }
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      res.json(result);
-    }
-  });
+  )
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
 });
 
 /**
@@ -86,13 +89,16 @@ route.put("/unlike", requireLogin, (req, res) => {
     req.body.postId,
     { $pull: { likes: req.user._id } },
     { new: true }
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      res.json(result);
-    }
-  });
+  )
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
 });
 
 /**
@@ -109,12 +115,39 @@ route.put("/comment", requireLogin, (req, res) => {
     { $push: { comments: comment } },
     { new: true }
   )
+    .populate("postedBy", "_id name")
     .populate("comments.postedBy", "_id name")
     .exec((err, result) => {
       if (err) {
         return res.status(422).json({ error: err });
       } else {
         res.json(result);
+      }
+    });
+});
+
+/**
+ * Route to delete a post
+ */
+route.delete("/deletepost/:postId", requireLogin, (req, res) => {
+  Post.findOne({ _id: req.params.postId })
+    .populate("postedBy", "_id")
+    .exec((err, post) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      }
+      if (!post) {
+        return res.status(422).json({ error: "Post Not Found" });
+      }
+      if (post.postedBy._id.toString() === req.user._id.toString()) {
+        post
+          .remove()
+          .then((result) => {
+            res.json({ message: "Post Deleted Successfully" });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     });
 });

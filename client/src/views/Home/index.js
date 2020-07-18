@@ -1,11 +1,13 @@
 import React from 'react';
 import Navbar from '../../components/Navbar';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   getAllPosts,
   likePost,
   unLikePost,
   makeComment,
+  deletePost,
 } from '../../services/store/actions';
 
 class Home extends React.Component {
@@ -86,6 +88,28 @@ class Home extends React.Component {
       );
     });
   };
+
+  renderPostDelete = post => {
+    if (
+      this.props.user &&
+      this.props.user.user_data &&
+      this.props.user.user_data._id &&
+      post
+    ) {
+      if (post.postedBy._id === this.props.user.user_data._id) {
+        return (
+          <div class="right floated meta">
+            <i
+              class="trash alternate outline red icon"
+              onClick={() => {
+                this.props.deletePost(post._id);
+              }}
+            ></i>
+          </div>
+        );
+      }
+    }
+  };
   renderPosts = () => {
     if (this.props.posts && this.props.posts.allposts) {
       return this.props.posts.allposts.map(post => {
@@ -95,13 +119,15 @@ class Home extends React.Component {
             style={{ margin: '30px auto', maxWidth: '550px' }}
           >
             <div class="content">
-              <div class="right floated meta">14h</div>
+              {this.renderPostDelete(post)}
               <img
                 alt="postImage"
                 class="ui avatar image"
                 src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
               />
-              {post.postedBy.name}
+              <Link to={`/userProfile/${post.postedBy._id}`}>
+                {post.postedBy.name}
+              </Link>
             </div>
             <div class="image">
               <img src={post.photo} />
@@ -139,4 +165,5 @@ export default connect(mapStateToProps, {
   likePost,
   unLikePost,
   makeComment,
+  deletePost,
 })(Home);
