@@ -1,4 +1,8 @@
-import { USERPROFILE } from '../actions/types';
+import {
+  USERPROFILE,
+  FOLLOWUSERPROFILE,
+  UNFOLLOWUSERPROFILE,
+} from '../actions/types';
 
 const INITIAL_STATE = {
   posts: [],
@@ -11,6 +15,16 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       posts: action.payload.posts,
       user: action.payload.user,
+    };
+  } else if (action.type === FOLLOWUSERPROFILE) {
+    return {
+      ...state,
+      user: action.payload,
+    };
+  } else if (action.type === UNFOLLOWUSERPROFILE) {
+    return {
+      ...state,
+      user: action.payload,
     };
   } else {
     return { ...state };

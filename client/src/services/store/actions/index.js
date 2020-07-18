@@ -6,6 +6,10 @@ import {
   ALLPOSTS,
   MYALLPOSTS,
   USERPROFILE,
+  FOLLOWUSER,
+  UNFOLLOWUSER,
+  FOLLOWUSERPROFILE,
+  UNFOLLOWUSERPROFILE,
 } from './types';
 import api from '../../api';
 import imageToCloud from '../../api/imageToCloud';
@@ -231,6 +235,64 @@ export const getProfile = userId => {
       .get(`/user/${userId}`)
       .then(response => {
         dispatch({ type: USERPROFILE, payload: response.data });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to follow a user
+ */
+export const followUser = followId => {
+  return (dispatch, getState) => {
+    api
+      .put('/follow', { followId: followId })
+      .then(response => {
+        // console.log(response)
+        let st = getState();
+        let obj = { ...st.user.user_data, following: response.data.following };
+        let obj1 = {
+          ...st.userProfile.user,
+          followers: response.data.following,
+        };
+
+        dispatch({ type: FOLLOWUSER, payload: obj });
+        dispatch({
+          type: FOLLOWUSERPROFILE,
+          payload: obj1,
+        });
+        dispatch({ type: SUCCESS, payload: 'Successfully Followed' });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to unfollow a user
+ */
+export const unFollowUser = unFollowId => {
+  return (dispatch, getState) => {
+    api
+      .put('/unfollow', { unFollowId: unFollowId })
+      .then(response => {
+        let st = getState();
+        let obj = { ...st.user.user_data, following: response.data.following };
+        let obj1 = {
+          ...st.userProfile.user,
+          followers: response.data.following,
+        };
+        dispatch({ type: UNFOLLOWUSER, payload: obj });
+        dispatch({
+          type: UNFOLLOWUSERPROFILE,
+          payload: obj1,
+        });
+        dispatch({ type: SUCCESS, payload: 'Successfully UnFollwed' });
       })
       .catch(error => {
         console.log(error);

@@ -20,7 +20,7 @@ const AppRoutes = ({ store }) => (
     <Route path="/signup" exact component={Signup} />
     <ProtectedRoute path="/profile" exact component={Profile}/>
     <ProtectedRoute path="/createPost" exact component={CreatePost}/>
-    <Route path="/userProfile/:id"  component={UserProfile}/>
+    <ProtectedRoute path="/userProfile/:id"  component={UserProfile}/>
     <Route path="*" component={() => '404 not found'} />
   </Switch>
 );

@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import Loader from '../../components/Loader';
 import './style.css';
-import { getProfile } from '../../services/store/actions';
+import {
+  getProfile,
+  followUser,
+  unFollowUser,
+} from '../../services/store/actions';
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -15,6 +19,45 @@ class UserProfile extends React.Component {
       return this.props.userProfile.posts.map(post => {
         return <img key={post._id} className="imgItem" src={post.photo}></img>;
       });
+    }
+  };
+  renderFollowButton = () => {
+    if (this.props.user.user_data._id !== this.props.userProfile.user._id) {
+      let b = false;
+      this.props.user.user_data.following.map(foll => {
+        if (foll === this.props.userProfile.user._id) {
+          b = true;
+          return;
+        }
+      });
+      // console.log(b)
+      if (b) {
+        return (
+          <div style={{ margin: '40px auto' }}>
+            <button
+              class="ui violet button"
+              onClick={() => {
+                this.props.unFollowUser(this.props.userProfile.user._id);
+              }}
+            >
+              Following
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <div style={{ margin: '40px auto' }}>
+            <button
+              class="ui violet basic button"
+              onClick={() => {
+                this.props.followUser(this.props.userProfile.user._id);
+              }}
+            >
+              Follow
+            </button>
+          </div>
+        );
+      }
     }
   };
   renderContent = () => {
@@ -53,15 +96,20 @@ class UserProfile extends React.Component {
                   }}
                 >
                   <div>
-                    <h5>40 posts</h5>
+                    <h5>{this.props.userProfile.posts.length} posts</h5>
                   </div>
                   <div>
-                    <h5>40 following</h5>
+                    <h5>
+                      {this.props.userProfile.user.following.length} following
+                    </h5>
                   </div>
                   <div>
-                    <h5>40 followers</h5>
+                    <h5>
+                      {this.props.userProfile.user.followers.length} followers
+                    </h5>
                   </div>
                 </div>
+                {this.renderFollowButton()}
               </div>
             </div>
             {/* gallery */}
@@ -82,4 +130,8 @@ class UserProfile extends React.Component {
 const mapStateToProps = state => {
   return { ...state };
 };
-export default connect(mapStateToProps, { getProfile })(UserProfile);
+export default connect(mapStateToProps, {
+  getProfile,
+  followUser,
+  unFollowUser,
+})(UserProfile);

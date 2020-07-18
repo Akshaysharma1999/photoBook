@@ -1,4 +1,12 @@
-import { ERROR, SUCCESS, LOG_IN, LOG_OUT, MYALLPOSTS } from '../actions/types';
+import {
+  ERROR,
+  SUCCESS,
+  LOG_IN,
+  LOG_OUT,
+  MYALLPOSTS,
+  FOLLOWUSER,
+  UNFOLLOWUSER,
+} from '../actions/types';
 
 const INITIAL_STATE = {
   errors: [],
@@ -36,6 +44,16 @@ export default (state = INITIAL_STATE, action) => {
     };
   } else if (action.type === MYALLPOSTS) {
     return { ...state, myAllPosts: action.payload.posts };
+  } else if (action.type === FOLLOWUSER) {
+    return {
+      ...state,
+      user_data: action.payload,     
+    };
+  } else if (action.type === UNFOLLOWUSER) {
+    return {
+      ...state,
+      user_data: action.payload,
+    };
   } else {
     return { ...state };
   }
