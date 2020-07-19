@@ -92,4 +92,24 @@ route.put("/unfollow", requireLogin, (req, res) => {
     }
   );
 });
+
+/**
+ * Update user profileImage
+ */
+route.put("/updatepic", requireLogin, (req, res) => {
+  User.findByIdAndUpdate(
+    { _id: req.user._id },
+    {
+      $set: { profileImage: req.body.profileImage },
+    },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(422).json({ error: "Pic Connot Post" });
+      }
+      result.password = undefined;
+      res.json(result);
+    }
+  );
+});
 module.exports = route;

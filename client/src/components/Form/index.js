@@ -95,10 +95,13 @@ class LoginForm extends React.Component {
   };
 
   onSubmit = formValues => {
-    const data = new FormData();
-    data.append('file', this.state.selectedFile);
-    data.append('upload_preset', 'photoBook');
-    data.append('cloud_name', 'dt9bv7wo6');
+    let data=null
+    if (this.state.selectedFile !== null) {
+      data = new FormData();
+      data.append('file', this.state.selectedFile);
+      data.append('upload_preset', 'photoBook');
+      data.append('cloud_name', 'dt9bv7wo6');
+    }
     this.props.onSubmit({ ...formValues, fileData: data });
   };
 
@@ -110,10 +113,10 @@ class LoginForm extends React.Component {
         className="error ui large form"
       >
         <div class="ui segment">{this.renderFields()}</div>
-        <button      
+        <button
           type="submit"
           // disabled={this.props.submitSucceeded}
-          className="ui fluid large violet submit button"          
+          className="ui fluid large violet submit button"
         >
           {this.props.btnText}
         </button>

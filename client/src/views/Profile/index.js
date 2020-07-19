@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import Loader from '../../components/Loader';
 import './style.css';
-import { getMyAllPosts } from '../../services/store/actions';
+import {
+  getMyAllPosts,
+  updateProfileImage,
+} from '../../services/store/actions';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -17,6 +20,15 @@ class Profile extends React.Component {
       });
     }
   };
+  onChangeHandler = e => {
+    // console.log(e.target.files[0]);
+    const data = new FormData();
+    data.append('file', e.target.files[0]);
+    data.append('upload_preset', 'photoBook');
+    data.append('cloud_name', 'dt9bv7wo6');
+    this.props.updateProfileImage({ fileData: data });
+  };
+
   renderContent = () => {
     if (this.props.user && this.props.user.myAllPosts) {
       return (
@@ -48,7 +60,7 @@ class Profile extends React.Component {
                 <div
                   style={{
                     display: 'flex',
-                    width: '130%',
+                    width: '80%',
                     justifyContent: 'space-between',
                   }}
                 >
@@ -65,6 +77,18 @@ class Profile extends React.Component {
                       {this.props.user.user_data.followers.length} followers
                     </h5>
                   </div>
+                </div>
+                <div style={{ margin: '40px auto' }}>
+                  <label for="files" class="ui violet basic button">
+                    Update Profile Pic
+                  </label>
+                  <input
+                    id="files"
+                    style={{ visibility: 'hidden' }}
+                    type="file"
+                    accept="image/*"
+                    onChange={this.onChangeHandler}
+                  />
                 </div>
               </div>
             </div>
@@ -86,4 +110,6 @@ class Profile extends React.Component {
 const mapStateToProps = state => {
   return { ...state };
 };
-export default connect(mapStateToProps, { getMyAllPosts })(Profile);
+export default connect(mapStateToProps, { getMyAllPosts, updateProfileImage })(
+  Profile,
+);

@@ -30,8 +30,7 @@ let data = [
 ];
 
 class Signup extends React.Component {
-  onSubmit = formvalues => {
-    // console.log(formvalues);
+  onSubmit = formvalues => {   
     this.props.signUp(formvalues);
   };
 

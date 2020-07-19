@@ -3,6 +3,7 @@ import {
   ERROR,
   MYFEED,
   LOG_IN,
+  UPDATEPIC,
   SUCCESS,
   ALLPOSTS,
   MYALLPOSTS,
@@ -17,6 +18,7 @@ import imageToCloud from '../../api/imageToCloud';
 import setToken from '../../../utils/setToken';
 import logOutUtil from '../../../utils/logout';
 import errorHandler from '../../../utils/errorHandler';
+import { formValues } from 'redux-form';
 /**
  * login action is called when login form is submitted with formvalues
  */
@@ -42,31 +44,42 @@ export const logIn = formValues => {
 /**
  * signup action is called when signup form is submitted with formvalues
  */
+function signUpHelper(formValues, dispatch, response) {
+  api
+    .post('/signup', {
+      name: formValues.name,
+      email: formValues.email,
+      password: formValues.password,
+      profileImage: response,
+    })
+    .then(response => {
+      dispatch({ type: SUCCESS, payload: response.data.message });
+      history.push(`/login`);
+    })
+    .catch(error => {
+      console.log(error);
+      errorHandler(error, dispatch, ERROR);
+    });
+}
 export const signUp = formValues => {
   // console.log(formValues)
   return (dispatch, getState) => {
-    imageToCloud
-      .post('/image/upload', formValues.fileData)
-      .then(response => {
-        api
-          .post('/signup', {
-            name: formValues.name,
-            email: formValues.email,
-            password: formValues.password,
-            profileImage: response.data.url,
-          })
-          .then(response => {
-            dispatch({ type: SUCCESS, payload: response.data.message });
-            history.push(`/login`);
-          })
-          .catch(error => {
-            console.log(error);
-            errorHandler(error, dispatch, ERROR);
-          });
-      })
-      .catch(error => {
-        errorHandler(error, dispatch, ERROR, 'Upload Image 😬');
-      });
+    if (formValues.fileData !== null) {
+      imageToCloud
+        .post('/image/upload', formValues.fileData)
+        .then(response => {
+          signUpHelper(formValues, dispatch, response.data.url);
+        })
+        .catch(error => {
+          errorHandler(error, dispatch, ERROR, 'Upload Image 😬');
+        });
+    } else {
+      signUpHelper(
+        formValues,
+        dispatch,
+        'https://res.cloudinary.com/dt9bv7wo6/image/upload/v1595159880/vippng.com-person-icon-png-transparent-4125354_ymyevc.png',
+      );
+    }
   };
 };
 
@@ -330,6 +343,34 @@ export const getMyFeed = () => {
       })
       .catch(error => {
         errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to update profile image
+ */
+export const updateProfileImage = formValues => {
+  return (dispatch, getState) => {
+    imageToCloud
+      .post('/image/upload', formValues.fileData)
+      .then(response => {
+        api
+          .put('/updatepic', { profileImage: response.data.url })
+          .then(response => {
+            // console.log(response);
+            let st = getState().user.user_data;
+            st.profileImage = response.data.profileImage;
+            dispatch({ type: UPDATEPIC, payload: st });
+            dispatch({ type: SUCCESS, payload: 'Profile Pic Updated' });
+          })
+          .catch(error => {
+            errorHandler(error, dispatch, ERROR);
+          });
+      })
+      .catch(error => {
+        console.log(error);
+        errorHandler(error, dispatch, ERROR, 'Upload Image 😬');
       });
   };
 };

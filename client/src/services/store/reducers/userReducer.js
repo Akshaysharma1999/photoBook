@@ -7,6 +7,7 @@ import {
   FOLLOWUSER,
   UNFOLLOWUSER,
   MYFEED,
+  UPDATEPIC,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -59,6 +60,8 @@ export default (state = INITIAL_STATE, action) => {
     };
   } else if (action.type === MYFEED) {
     return { ...state, myFeed: action.payload.posts };
+  } else if (action.type === UPDATEPIC) {
+    return { ...state, user_data: action.payload };
   } else {
     return { ...state };
   }

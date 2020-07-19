@@ -62,7 +62,7 @@ class UserProfile extends React.Component {
   };
   renderContent = () => {
     if (
-      this.props.userProfile &&
+      this.props.userProfile && this.props.userProfile.user &&
       this.props.match.params.id === this.props.userProfile.user._id
     ) {
       return (

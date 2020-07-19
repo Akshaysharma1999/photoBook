@@ -32,7 +32,7 @@ class Navbar extends React.Component {
       );
     } else {
       return (
-        <div class="ui large menu">
+        <div class="ui large stackable menu">
           <Link class="item " id="logo" to="/">
             PhotoBook
           </Link>
@@ -55,7 +55,7 @@ class Navbar extends React.Component {
               </Link>
             </div>
             <div class="item">
-              <Link to="/profile" class="item">
+              <Link to="/profile">
                 <div class="ui black basic button">Profile</div>
               </Link>
             </div>
