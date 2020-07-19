@@ -21,7 +21,7 @@ class UserProfile extends React.Component {
       });
     }
   };
-  renderFollowButton = () => {
+  renderFollowButton =  () => {
     if (this.props.user.user_data._id !== this.props.userProfile.user._id) {
       let b = false;
       this.props.user.user_data.following.map(foll => {
@@ -30,7 +30,7 @@ class UserProfile extends React.Component {
           return;
         }
       });
-      // console.log(b)
+
       if (b) {
         return (
           <div style={{ margin: '40px auto' }}>
@@ -61,7 +61,10 @@ class UserProfile extends React.Component {
     }
   };
   renderContent = () => {
-    if (this.props.match.params.id === this.props.userProfile.user._id) {
+    if (
+      this.props.userProfile &&
+      this.props.match.params.id === this.props.userProfile.user._id
+    ) {
       return (
         <div>
           <Navbar />
@@ -83,7 +86,7 @@ class UserProfile extends React.Component {
                     borderRadius: '80px',
                   }}
                   alt="profileImage"
-                  src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                  src={this.props.userProfile.user.profileImage}
                 ></img>
               </div>
               <div>

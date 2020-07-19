@@ -16,6 +16,9 @@ export const validate = formValues => {
   if (!formValues.password) {
     errors.password = 'You must enter a password';
   }
+  // if (!formValues.file) {
+  //   errors.file = 'You must choose a Photo';
+  // }
 
   return errors;
 };

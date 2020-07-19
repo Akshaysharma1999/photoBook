@@ -38,6 +38,11 @@ class Navbar extends React.Component {
           </Link>
           <div class="right menu">
             <div class="item">
+              <Link to="/myfeed">
+                <div class="ui black basic button">My Feed</div>
+              </Link>
+            </div>
+            <div class="item">
               <Link to="/createpost">
                 <div class="ui black basic button">Create Post</div>
               </Link>
@@ -49,9 +54,11 @@ class Navbar extends React.Component {
                 </div>
               </Link>
             </div>
-            <Link to="/profile" class="item">
-              Profile
-            </Link>
+            <div class="item">
+              <Link to="/profile" class="item">
+                <div class="ui black basic button">Profile</div>
+              </Link>
+            </div>
           </div>
         </div>
       );

@@ -10,8 +10,8 @@ const { JWT_SECRET } = require("../keys");
  * Route for creating user
  */
 route.post("/signup", (req, res) => {
-  const { name, email, password } = req.body;
-  if (!email || !name || !password) {
+  const { name, email, password, profileImage } = req.body;
+  if (!email || !name || !password || !profileImage) {
     return res.status(422).json({ error: "Add all fields" });
   }
   User.findOne({ email: email })
@@ -24,6 +24,7 @@ route.post("/signup", (req, res) => {
             email: email,
             name: name,
             password: hashedPassword,
+            profileImage: profileImage,
           });
           user
             .save()
@@ -67,6 +68,7 @@ route.post("/signin", (req, res) => {
             _id: savedUser._id,
             followers: savedUser.followers,
             following: savedUser.following,
+            profileImage: savedUser.profileImage,
           });
         } else {
           return res.status(422).json({ error: "Invalid Email or Password" });

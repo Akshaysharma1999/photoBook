@@ -1,19 +1,14 @@
 import React from 'react';
 import Navbar from '../../components/Navbar';
+import Loader from '../../components/Loader';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  getAllPosts,
-  likePost,
-  unLikePost,
-  makeComment,
-  deletePost,
-} from '../../services/store/actions';
+import { getMyFeed } from '../../services/store/actions';
 
-class Home extends React.Component {
+class MyFeed extends React.Component {
   constructor(props) {
     super(props);
-    props.getAllPosts();
+    props.getMyFeed();
   }
   setLikeClass = post => {
     let b = false;
@@ -83,10 +78,7 @@ class Home extends React.Component {
     return post.comments.map(comment => {
       return (
         <div>
-          <Link to={`/userprofile/${comment.postedBy._id}`}>
-            <b style={{ color: 'black' }}>{comment.postedBy.name}</b>
-          </Link>
-          : {comment.text}
+          <b>{comment.postedBy.name}</b> : {comment.text}
         </div>
       );
     });
@@ -114,8 +106,8 @@ class Home extends React.Component {
     }
   };
   renderPosts = () => {
-    if (this.props.posts && this.props.posts.allposts) {
-      return this.props.posts.allposts.map(post => {
+    if (this.props.user && this.props.user.myFeed) {
+      return this.props.user.myFeed.map(post => {
         return (
           <div
             className="ui card fluid"
@@ -126,7 +118,7 @@ class Home extends React.Component {
               <img
                 alt="postImage"
                 class="ui avatar image"
-                src={post.postedBy.profileImage}
+                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
               />
               <Link to={`/userProfile/${post.postedBy._id}`}>
                 {post.postedBy.name}
@@ -148,13 +140,18 @@ class Home extends React.Component {
           </div>
         );
       });
+    } else {
+      return <Loader />;
     }
+  };
+  renderContent = () => {
+    return <div className="ui container">{this.renderPosts()}</div>;
   };
   render() {
     return (
       <div>
         <Navbar />
-        <div className="ui container">{this.renderPosts()}</div>
+        {this.renderContent()}
       </div>
     );
   }
@@ -163,10 +160,4 @@ const mapStateToProps = state => {
   // console.log(state);
   return { ...state };
 };
-export default connect(mapStateToProps, {
-  getAllPosts,
-  likePost,
-  unLikePost,
-  makeComment,
-  deletePost,
-})(Home);
+export default connect(mapStateToProps, { getMyFeed })(MyFeed);

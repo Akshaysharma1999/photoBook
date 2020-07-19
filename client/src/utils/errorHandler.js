@@ -7,6 +7,7 @@ import history from './../views/history';
  * TYPE_OF_REDUCER will be ERROR as made .
  */
 export default (error, dispatch, type, customPayload) => {
+
   if (error.response) {
     if (error.response.status === 500) {
       dispatch({
@@ -24,7 +25,10 @@ export default (error, dispatch, type, customPayload) => {
     } else {
       dispatch({
         type: type,
-        payload: customPayload || error.response.data.error,
+        payload:
+          customPayload ||
+          error.response.data.error.message ||
+          error.response.data.error,
       });
     }
   } else {

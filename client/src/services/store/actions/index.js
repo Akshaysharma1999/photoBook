@@ -1,12 +1,13 @@
 import history from '../../../views/history';
 import {
-  LOG_IN,
   ERROR,
+  MYFEED,
+  LOG_IN,
   SUCCESS,
   ALLPOSTS,
   MYALLPOSTS,
-  USERPROFILE,
   FOLLOWUSER,
+  USERPROFILE,
   UNFOLLOWUSER,
   FOLLOWUSERPROFILE,
   UNFOLLOWUSERPROFILE,
@@ -44,18 +45,27 @@ export const logIn = formValues => {
 export const signUp = formValues => {
   // console.log(formValues)
   return (dispatch, getState) => {
-    api
-      .post('/signup', {
-        name: formValues.name,
-        email: formValues.email,
-        password: formValues.password,
-      })
+    imageToCloud
+      .post('/image/upload', formValues.fileData)
       .then(response => {
-        history.push(`/login`);
+        api
+          .post('/signup', {
+            name: formValues.name,
+            email: formValues.email,
+            password: formValues.password,
+            profileImage: response.data.url,
+          })
+          .then(response => {
+            dispatch({ type: SUCCESS, payload: response.data.message });
+            history.push(`/login`);
+          })
+          .catch(error => {
+            console.log(error);
+            errorHandler(error, dispatch, ERROR);
+          });
       })
       .catch(error => {
-        console.log(error);
-        errorHandler(error, dispatch, ERROR);
+        errorHandler(error, dispatch, ERROR, 'Upload Image 😬');
       });
   };
 };
@@ -90,7 +100,7 @@ export const createPost = formValues => {
           });
       })
       .catch(error => {
-        errorHandler(error, dispatch, ERROR);
+        errorHandler(error, dispatch, ERROR, 'Upload Image 😬');
       });
   };
 };
@@ -253,10 +263,13 @@ export const followUser = followId => {
       .then(response => {
         // console.log(response)
         let st = getState();
-        let obj = { ...st.user.user_data, following: response.data.following };
+        let obj = {
+          ...st.user.user_data,
+          following: response.data.from.following,
+        };
         let obj1 = {
           ...st.userProfile.user,
-          followers: response.data.following,
+          followers: response.data.to.followers,
         };
 
         dispatch({ type: FOLLOWUSER, payload: obj });
@@ -281,11 +294,15 @@ export const unFollowUser = unFollowId => {
     api
       .put('/unfollow', { unFollowId: unFollowId })
       .then(response => {
+        // console.log(response)
         let st = getState();
-        let obj = { ...st.user.user_data, following: response.data.following };
+        let obj = {
+          ...st.user.user_data,
+          following: response.data.from.following,
+        };
         let obj1 = {
           ...st.userProfile.user,
-          followers: response.data.following,
+          followers: response.data.to.followers,
         };
         dispatch({ type: UNFOLLOWUSER, payload: obj });
         dispatch({
@@ -296,6 +313,22 @@ export const unFollowUser = unFollowId => {
       })
       .catch(error => {
         console.log(error);
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * action to get posts of people i follow
+ */
+export const getMyFeed = () => {
+  return (dispatch, getState) => {
+    api
+      .get('/getsubposts')
+      .then(response => {
+        dispatch({ type: MYFEED, payload: response.data });
+      })
+      .catch(error => {
         errorHandler(error, dispatch, ERROR);
       });
   };

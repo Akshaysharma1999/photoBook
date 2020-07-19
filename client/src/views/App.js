@@ -12,15 +12,17 @@ import Login from './Login';
 import Profile from './Profile';
 import CreatePost from './CreatePost';
 import UserProfile from './UserProfile';
+import MyFeed from './MyFeed';
 
 const AppRoutes = ({ store }) => (
   <Switch>
     <Route path="/" exact component={Home} />
     <Route path="/login" exact component={Login} />
     <Route path="/signup" exact component={Signup} />
-    <ProtectedRoute path="/profile" exact component={Profile}/>
-    <ProtectedRoute path="/createPost" exact component={CreatePost}/>
-    <ProtectedRoute path="/userProfile/:id"  component={UserProfile}/>
+    <ProtectedRoute path="/profile" exact component={Profile} />
+    <ProtectedRoute path="/createPost" exact component={CreatePost} />
+    <ProtectedRoute path="/userProfile/:id" component={UserProfile} />
+    <ProtectedRoute path="/myfeed" component={MyFeed} />
     <Route path="*" component={() => '404 not found'} />
   </Switch>
 );

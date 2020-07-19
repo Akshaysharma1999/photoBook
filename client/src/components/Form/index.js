@@ -25,7 +25,7 @@ class LoginForm extends React.Component {
    * Function to submit uploaded file .
    */
   onChangeHandler = e => {
-    console.log(e.target.files[0]);
+    // console.log(e.target.files[0]);
     this.setState({
       selectedFile: e.target.files[0],
       loaded: 0,
@@ -58,7 +58,7 @@ class LoginForm extends React.Component {
               onChange={this.onChangeHandler}
             />
           </div>
-          {this.renderError(meta)}
+          {/* {this.renderError(meta)} */}
         </div>
       );
     } else {
@@ -103,13 +103,18 @@ class LoginForm extends React.Component {
   };
 
   render() {
+    // console.log(this.props);
     return (
       <form
         onSubmit={this.props.handleSubmit(this.onSubmit)}
         className="error ui large form"
       >
         <div class="ui segment">{this.renderFields()}</div>
-        <button className="ui fluid large violet submit button">
+        <button      
+          type="submit"
+          // disabled={this.props.submitSucceeded}
+          className="ui fluid large violet submit button"          
+        >
           {this.props.btnText}
         </button>
       </form>

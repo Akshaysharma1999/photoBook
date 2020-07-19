@@ -40,7 +40,7 @@ class Profile extends React.Component {
                     borderRadius: '80px',
                   }}
                   alt="profileImage"
-                  src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                  src={this.props.user.user_data.profileImage}
                 ></img>
               </div>
               <div>

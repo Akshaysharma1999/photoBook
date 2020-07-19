@@ -4,7 +4,7 @@ import Form from '../../components/Form';
 import Navbar from '../../components/Navbar';
 import './style.css';
 import { validate } from './validate';
-import {signUp} from '../../services/store/actions'
+import { signUp } from '../../services/store/actions';
 
 let data = [
   { name: 'name', type: 'text', label: 'Enter Your Name', icon: 'user icon' },
@@ -20,12 +20,19 @@ let data = [
     label: 'Enter Password',
     icon: 'key icon',
   },
+  {
+    name: 'file',
+    type: 'file',
+    label: 'Select Image',
+    icon: 'folder open outline icon',
+    accept: 'image/*',
+  },
 ];
 
 class Signup extends React.Component {
   onSubmit = formvalues => {
     // console.log(formvalues);
-    this.props.signUp(formvalues)
+    this.props.signUp(formvalues);
   };
 
   render() {
@@ -40,7 +47,7 @@ class Signup extends React.Component {
                 onSubmit={this.onSubmit}
                 data={data}
                 validate={validate}
-                btnText={'Signup'}               
+                btnText={'Signup'}
               />
               <div className="ui violet message">
                 Already have an account? <a href="/login">Login</a>
@@ -53,4 +60,4 @@ class Signup extends React.Component {
   }
 }
 
-export default connect(null,{signUp})(Signup);
+export default connect(null, { signUp })(Signup);

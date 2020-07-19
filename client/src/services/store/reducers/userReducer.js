@@ -6,6 +6,7 @@ import {
   MYALLPOSTS,
   FOLLOWUSER,
   UNFOLLOWUSER,
+  MYFEED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -14,6 +15,7 @@ const INITIAL_STATE = {
   user_data: null,
   isLogedIn: false,
   myAllPosts: [],
+  myFeed: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,19 +43,22 @@ export default (state = INITIAL_STATE, action) => {
       user_data: null,
       isLogedIn: false,
       myAllPosts: [],
+      myFeed: [],
     };
   } else if (action.type === MYALLPOSTS) {
     return { ...state, myAllPosts: action.payload.posts };
   } else if (action.type === FOLLOWUSER) {
     return {
       ...state,
-      user_data: action.payload,     
+      user_data: action.payload,
     };
   } else if (action.type === UNFOLLOWUSER) {
     return {
       ...state,
       user_data: action.payload,
     };
+  } else if (action.type === MYFEED) {
+    return { ...state, myFeed: action.payload.posts };
   } else {
     return { ...state };
   }

@@ -34,7 +34,7 @@ route.post("/createpost", requireLogin, (req, res) => {
  */
 route.get("/allposts", (req, res) => {
   Post.find()
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profileImage")
     .populate("comments.postedBy", "_id name")
     .then((posts) => {
       posts.reverse();
@@ -50,7 +50,7 @@ route.get("/allposts", (req, res) => {
  */
 route.get("/myallposts", requireLogin, (req, res) => {
   Post.find({ postedBy: req.user._id })
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profileImage")
     .populate("comments.postedBy", "_id name")
     .then((posts) => {
       posts.reverse();
@@ -70,7 +70,7 @@ route.put("/like", requireLogin, (req, res) => {
     { $push: { likes: req.user._id } },
     { new: true }
   )
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profileImage")
     .populate("comments.postedBy", "_id name")
     .exec((err, result) => {
       if (err) {
@@ -90,7 +90,7 @@ route.put("/unlike", requireLogin, (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true }
   )
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profileImage")
     .populate("comments.postedBy", "_id name")
     .exec((err, result) => {
       if (err) {
@@ -115,7 +115,7 @@ route.put("/comment", requireLogin, (req, res) => {
     { $push: { comments: comment } },
     { new: true }
   )
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name profileImage")
     .populate("comments.postedBy", "_id name")
     .exec((err, result) => {
       if (err) {
@@ -152,4 +152,19 @@ route.delete("/deletepost/:postId", requireLogin, (req, res) => {
     });
 });
 
+/**
+ * Route to get posts of people i follow
+ */
+route.get("/getsubposts", requireLogin, (req, res) => {
+  Post.find({ postedBy: { $in: req.user.following } })
+    .populate("postedBy", "_id name profileImage")
+    .populate("comments.postedBy", "_id name")
+    .then((posts) => {
+      posts.reverse();
+      res.json({ posts: posts });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 module.exports = route;

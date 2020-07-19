@@ -36,7 +36,8 @@ route.put("/follow", requireLogin, (req, res) => {
       $push: { followers: req.user._id },
     },
     { new: true },
-    (err, result) => {
+    (err, resultOn) => {
+      // console.log(result)
       if (err) {
         return res.status(422).json({ error: err });
       }
@@ -49,7 +50,8 @@ route.put("/follow", requireLogin, (req, res) => {
       )
         .then((result) => {
           result.password = undefined;
-          res.json(result);
+          resultOn.password = undefined;
+          res.json({ from: result, to: resultOn });
         })
         .catch((error) => {
           return res.status(422).json({ error: error });
@@ -68,7 +70,7 @@ route.put("/unfollow", requireLogin, (req, res) => {
       $pull: { followers: req.user._id },
     },
     { new: true },
-    (err, result) => {
+    (err, resultOn) => {
       if (err) {
         return res.status(422).json({ error: err });
       }
@@ -81,7 +83,8 @@ route.put("/unfollow", requireLogin, (req, res) => {
       )
         .then((result) => {
           result.password = undefined;
-          res.json(result);
+          resultOn.password = undefined;
+          res.json({ from: result, to: resultOn });
         })
         .catch((error) => {
           return res.status(422).json({ error: error });
