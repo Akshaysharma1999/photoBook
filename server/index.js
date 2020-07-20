@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const PORT = 5000;
 const { MONGOURI } = require("./keys");
+require('dotenv').config();
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
