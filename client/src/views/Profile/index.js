@@ -49,13 +49,13 @@ class Profile extends React.Component {
                   style={{
                     width: '160px',
                     height: '160px',
-                    borderRadius: '80px',
+                    borderRadius: '80px',                    
                   }}
                   alt="profileImage"
                   src={this.props.user.user_data.profileImage}
                 ></img>
               </div>
-              <div>
+              <div style={{ margin: 'auto 100px' }}>
                 <h1 className>{this.props.user.user_data.name}</h1>
                 <div
                   style={{

@@ -1,10 +1,36 @@
 const express = require("express");
+const nodemailer = require("nodemailer");
 const route = express.Router();
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../keys");
+const { JWT_SECRET , GPASS , GMAIL } = require("../keys");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "myphotobookapp@gmail.com",
+    pass: "", 
+  },
+});
+
+const mailOptions = {
+  from: "myphotobookapp@gmail.com",
+  to: "",
+  subject: "NEW MSG !!!",
+  text: "HI BRO!!!",
+};
+
+route.get("/mailme", (req, res) => {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+});
 
 /**
  * Route for creating user

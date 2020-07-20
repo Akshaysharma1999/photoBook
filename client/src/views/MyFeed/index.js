@@ -118,7 +118,7 @@ class MyFeed extends React.Component {
               <img
                 alt="postImage"
                 class="ui avatar image"
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                src={post.postedBy.profileImage}
               />
               <Link to={`/userProfile/${post.postedBy._id}`}>
                 {post.postedBy.name}
