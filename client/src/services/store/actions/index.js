@@ -36,8 +36,8 @@ export const logIn = formValues => {
         dispatch({ type: LOG_IN, payload: response.data });
         history.push(`/profile`);
       })
-      .catch(error => {
-        errorHandler(error, dispatch, ERROR);
+      .catch(error => {         
+        errorHandler(error, dispatch, ERROR);         
       });
   };
 };

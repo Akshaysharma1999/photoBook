@@ -22,6 +22,12 @@ let data = [
     icon: 'key icon',
   },
   {
+    name: 'confirmPassword',
+    type: 'password',
+    label: 'Confirm Password',
+    icon: 'key icon',
+  },
+  {
     name: 'file',
     type: 'file',
     label: 'Select Image',
@@ -32,7 +38,7 @@ let data = [
 
 class Signup extends React.Component {
   onSubmit = formvalues => {
-    this.props.signUp(formvalues);
+    return this.props.signUp(formvalues);   
   };
 
   render() {

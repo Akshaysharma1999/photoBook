@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 
 let validate;
 class LoginForm extends React.Component {
@@ -7,6 +7,7 @@ class LoginForm extends React.Component {
     super(props);
     this.state = {
       selectedFile: null,
+      disabled: false,
     };
     validate = this.props.validate;
     this.props.reset();
@@ -94,15 +95,18 @@ class LoginForm extends React.Component {
     });
   };
 
-  onSubmit = formValues => {
-    let data=null
+  onSubmit = async formValues => {
+    let data = null;
+    this.setState({ disabled: true });
     if (this.state.selectedFile !== null) {
       data = new FormData();
       data.append('file', this.state.selectedFile);
       data.append('upload_preset', 'photoBook');
       data.append('cloud_name', 'dt9bv7wo6');
     }
-    this.props.onSubmit({ ...formValues, fileData: data });
+    let a = await this.props.onSubmit({ ...formValues, fileData: data });
+    this.props.reset();
+    //  console.log(a)
   };
 
   render() {
@@ -115,7 +119,7 @@ class LoginForm extends React.Component {
         <div class="ui segment">{this.renderFields()}</div>
         <button
           type="submit"
-          // disabled={this.props.submitSucceeded}
+          disabled={this.props.submitting}
           className="ui fluid large violet submit button"
         >
           {this.props.btnText}
