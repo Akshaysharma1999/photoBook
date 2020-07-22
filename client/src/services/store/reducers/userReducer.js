@@ -8,6 +8,7 @@ import {
   UNFOLLOWUSER,
   MYFEED,
   UPDATEPIC,
+  SEARCHUSER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   isLogedIn: false,
   myAllPosts: [],
   myFeed: [],
+  searchUserArr: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -45,6 +47,7 @@ export default (state = INITIAL_STATE, action) => {
       isLogedIn: false,
       myAllPosts: [],
       myFeed: [],
+      searchUserArr: [],
     };
   } else if (action.type === MYALLPOSTS) {
     return { ...state, myAllPosts: action.payload.posts };
@@ -62,6 +65,8 @@ export default (state = INITIAL_STATE, action) => {
     return { ...state, myFeed: action.payload.posts };
   } else if (action.type === UPDATEPIC) {
     return { ...state, user_data: action.payload };
+  } else if (action.type === SEARCHUSER) {
+    return { ...state, searchUserArr: action.payload };
   } else {
     return { ...state };
   }

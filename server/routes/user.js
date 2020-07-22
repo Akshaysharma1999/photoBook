@@ -112,4 +112,20 @@ route.put("/updatepic", requireLogin, (req, res) => {
     }
   );
 });
+
+/**
+ * Route to search user
+ */
+route.post("/searchUsers", (req, res) => {
+  let userPattern = new RegExp("^" + req.body.query);
+
+  User.find({ email: { $regex: userPattern } })
+    .select("followers following _id email name profileImage _v")
+    .then((user) => {
+      res.json({ users: user });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 module.exports = route;

@@ -21,7 +21,7 @@ class UserProfile extends React.Component {
       });
     }
   };
-  renderFollowButton =  () => {
+  renderFollowButton = () => {
     if (this.props.user.user_data._id !== this.props.userProfile.user._id) {
       let b = false;
       this.props.user.user_data.following.map(foll => {
@@ -62,7 +62,8 @@ class UserProfile extends React.Component {
   };
   renderContent = () => {
     if (
-      this.props.userProfile && this.props.userProfile.user &&
+      this.props.userProfile &&
+      this.props.userProfile.user &&
       this.props.match.params.id === this.props.userProfile.user._id
     ) {
       return (
@@ -90,7 +91,12 @@ class UserProfile extends React.Component {
                 ></img>
               </div>
               <div>
-                <h1 className>{this.props.userProfile.user.name}</h1>
+                <div>
+                  <h1 >{this.props.userProfile.user.name}</h1>
+                </div>
+                <div>
+                  <h3 style={{ margin:"15px 0px"}}>{this.props.userProfile.user.email}</h3>
+                </div>
                 <div
                   style={{
                     display: 'flex',

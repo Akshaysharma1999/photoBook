@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './style.css';
+import Modal from '../Modal';
 import logout from '../../utils/logout';
 
 class Navbar extends React.Component {
@@ -36,7 +37,10 @@ class Navbar extends React.Component {
           <Link class="item " id="logo" to="/">
             PhotoBook
           </Link>
-          <div class="right menu">            
+          <div class="right menu">
+            <div className="item">
+              <Modal/>
+            </div>
             <div class="item">
               <Link to="/myfeed">
                 <div class="ui black basic button">My Feed</div>

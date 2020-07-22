@@ -106,7 +106,7 @@ class MyFeed extends React.Component {
     }
   };
   renderPosts = () => {
-    if (this.props.user && this.props.user.myFeed) {
+    if (this.props.user && this.props.user.myFeed && this.props.user.myFeed.length!==0) {
       return this.props.user.myFeed.map(post => {
         return (
           <div

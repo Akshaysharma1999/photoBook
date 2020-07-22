@@ -56,12 +56,15 @@ class Profile extends React.Component {
                 ></img>
               </div>
               <div style={{ margin: 'auto 100px' }}>
-                <h1 className>{this.props.user.user_data.name}</h1>
+                <div><h1>{this.props.user.user_data.name}</h1></div>
+                <div style={{ margin:"15px 0px"}}><h3>{this.props.user.user_data.email}</h3></div>
+                
                 <div
                   style={{
                     display: 'flex',
                     width: '80%',
                     justifyContent: 'space-between',
+                    margin:"20px 0px"
                   }}
                 >
                   <div>

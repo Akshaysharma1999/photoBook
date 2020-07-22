@@ -5,6 +5,7 @@ import {
   LOG_IN,
   UPDATEPIC,
   SUCCESS,
+  SEARCHUSER,
   ALLPOSTS,
   MYALLPOSTS,
   FOLLOWUSER,
@@ -260,8 +261,9 @@ export const getProfile = userId => {
         dispatch({ type: USERPROFILE, payload: response.data });
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
         errorHandler(error, dispatch, ERROR);
+        history.push('/');
       });
   };
 };
@@ -409,6 +411,23 @@ export const resetPassword = formValues => {
         // console.log(response);
         dispatch({ type: SUCCESS, payload: response.data.message });
         history.push('/login');
+      })
+      .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * Search User
+ */
+export const searchUser = query => {
+  return (dispatch, getState) => {
+    api
+      .post('/searchUsers', { query: query })
+      .then(response => {
+        // console.log(response.data)
+        dispatch({ type: SEARCHUSER, payload: response.data.users });
       })
       .catch(error => {
         errorHandler(error, dispatch, ERROR);
