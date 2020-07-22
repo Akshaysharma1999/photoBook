@@ -1,34 +1,75 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const route = express.Router();
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET , GPASS , GMAIL } = require("../keys");
+const { JWT_SECRET, GPASS, GMAIL } = require("../keys");
 
+/**
+ * Send Mail Setup
+ */
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "myphotobookapp@gmail.com",
-    pass: "", 
+    user: process.env.GMAIL,
+    pass: process.env.GPASS,
   },
 });
 
-const mailOptions = {
-  from: "myphotobookapp@gmail.com",
-  to: "",
-  subject: "NEW MSG !!!",
-  text: "HI BRO!!!",
-};
+function mailHelper(subject, text, html, mailTo, res) {
+  const mailOptions = {
+    from: process.env.GMAIL,
+    to: mailTo,
+    subject: subject,
+    text: text,
+    html: html,
+  };
 
-route.get("/mailme", (req, res) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
+      if (res === null) {
+        console.log(error);
+      } else {
+        return res.status(422).json({ error: "Error Sending Mail" });
+      }
     }
+    if (res === null) {
+      console.log(info);
+    } else {
+      res.json({ message: "Mail Sent 📧" });
+    }
+  });
+}
+
+/**
+ * Route to send Reset Mail Link
+ */
+route.post("/resetMailLink", (req, res) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+    }
+    const token = buffer.toString("hex");
+
+    User.findOne({ email: req.body.mailTo }).then((user) => {
+      if (!user) {
+        return res.status(422).json({ error: "User Does Not Exist" });
+      }
+      user.resetToken = token;
+      user.expireToken = Date.now() + 3600000;
+      user.save().then((result) => {
+        mailHelper(
+          "Password Reset",
+          "Password Reset Link",
+          `<p>Click to reset password <a href="http://localhost:3000/resetPassword/${token}">here</a><p/>`,
+          req.body.mailTo,
+          res
+        );
+      });
+    });
   });
 });
 
@@ -56,6 +97,13 @@ route.post("/signup", (req, res) => {
             .save()
             .then((user) => {
               res.json({ message: "Saved successfully" });
+              mailHelper(
+                "Welcome To photoBook",
+                "Happy you have joined us",
+                "<p>Enjoy Awesom Features <a href=`http://localhost:3000/`>here</a><p/>",
+                req.body.email,
+                null
+              );
             })
             .catch((err) => {
               console.log(err);
@@ -106,4 +154,29 @@ route.post("/signin", (req, res) => {
   });
 });
 
+/**
+ * Route to reset password
+ */
+
+route.post("/newPass", (req, res) => {
+  const newPassword = req.body.password;
+  const recToken = req.body.token;
+  User.findOne({ resetToken: recToken, expireToken: { $gt: Date.now() } })
+    .then((user) => {
+      if (!user) {
+        return res.status(422).json({ error: "Link Expired" });
+      }
+      bcrypt.hash(newPassword, 10).then((hashedPassword) => {
+        user.password = hashedPassword;
+        user.resetToken = undefined;
+        user.expireToken = undefined;
+        user.save().then((savedUser) => {
+          res.json({ message: "Password Updated Successfully" });
+        });
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 module.exports = route;

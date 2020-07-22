@@ -13,6 +13,8 @@ import Profile from './Profile';
 import CreatePost from './CreatePost';
 import UserProfile from './UserProfile';
 import MyFeed from './MyFeed';
+import SendResetPassLink from './SendResetPassLink';
+import ResetPassword from './ResetPassword';
 
 const AppRoutes = ({ store }) => (
   <Switch>
@@ -23,6 +25,8 @@ const AppRoutes = ({ store }) => (
     <ProtectedRoute path="/createPost" exact component={CreatePost} />
     <ProtectedRoute path="/userProfile/:id" component={UserProfile} />
     <ProtectedRoute path="/myfeed" component={MyFeed} />
+    <Route path="/forgotPass" exact component={SendResetPassLink} />
+    <Route path="/resetPassword/:id" component={ResetPassword} />
     <Route path="*" component={() => '404 not found'} />
   </Switch>
 );

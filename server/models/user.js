@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
   followers: [{ type: ObjectId, ref: "User" }],
   following: [{ type: ObjectId, ref: "User" }],
   profileImage: { type: String, required: true },
+  resetToken: { type: String },
+  expireToken: { type: Date },
 });
 
 module.exports = mongoose.model("User", userSchema);

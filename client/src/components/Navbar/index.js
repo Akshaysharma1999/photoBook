@@ -36,7 +36,7 @@ class Navbar extends React.Component {
           <Link class="item " id="logo" to="/">
             PhotoBook
           </Link>
-          <div class="right menu">           
+          <div class="right menu">            
             <div class="item">
               <Link to="/myfeed">
                 <div class="ui black basic button">My Feed</div>

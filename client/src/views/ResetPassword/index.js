@@ -5,16 +5,9 @@ import Form from '../../components/Form';
 import Navbar from '../../components/Navbar';
 import './style.css';
 import { validate } from './validate';
-import { signUp } from '../../services/store/actions';
+import { resetPassword } from '../../services/store/actions';
 
 let data = [
-  { name: 'name', type: 'text', label: 'Enter Your Name', icon: 'user icon' },
-  {
-    name: 'email',
-    type: 'text',
-    label: 'Enter Email',
-    icon: 'envelope outline icon',
-  },
   {
     name: 'password',
     type: 'password',
@@ -22,17 +15,21 @@ let data = [
     icon: 'key icon',
   },
   {
-    name: 'file',
-    type: 'file',
-    label: 'Select Image',
-    icon: 'folder open outline icon',
-    accept: 'image/*',
+    name: 'confirmPassword',
+    type: 'password',
+    label: 'Confirm Password',
+    icon: 'key icon',
   },
 ];
 
-class Signup extends React.Component {
+class ResetPassword extends React.Component {
   onSubmit = formvalues => {
-    this.props.signUp(formvalues);
+    console.log(formvalues);
+    // console.log(this.props)
+    this.props.resetPassword({
+      ...formvalues,
+      token: this.props.match.params.id,
+    });
   };
 
   render() {
@@ -42,16 +39,13 @@ class Signup extends React.Component {
         <div id="mycard">
           <div className="ui grid">
             <div className="column">
-              <h1 className="message">Signup</h1>
+              <h1 className="message">Reset Password</h1>
               <Form
                 onSubmit={this.onSubmit}
                 data={data}
                 validate={validate}
-                btnText={'Signup'}
+                btnText={'Reset Password'}
               />
-              <div className="ui violet message">
-                Already have an account? <Link to="/login">Login</Link>
-              </div>
             </div>
           </div>
         </div>
@@ -60,4 +54,4 @@ class Signup extends React.Component {
   }
 }
 
-export default connect(null, { signUp })(Signup);
+export default connect(null, { resetPassword })(ResetPassword);

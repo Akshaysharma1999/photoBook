@@ -374,3 +374,44 @@ export const updateProfileImage = formValues => {
       });
   };
 };
+
+/**
+ * Send Reset Pass Link
+ */
+
+export const sendResetPassLink = formValues => {
+  return (dispatch, getState) => {
+    api
+      .post('/resetMailLink', {
+        mailTo: formValues.email,
+      })
+      .then(response => {
+        console.log(response);
+        dispatch({ type: SUCCESS, payload: response.data.message });
+      })
+      .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};
+
+/**
+ * Reset Password
+ */
+export const resetPassword = formValues => {
+  return (dispatch, getState) => {
+    api
+      .post('/newPass', {
+        password: formValues.password,
+        token: formValues.token,
+      })
+      .then(response => {
+        // console.log(response);
+        dispatch({ type: SUCCESS, payload: response.data.message });
+        history.push('/login');
+      })
+      .catch(error => {
+        errorHandler(error, dispatch, ERROR);
+      });
+  };
+};

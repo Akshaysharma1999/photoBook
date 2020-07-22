@@ -1,13 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Form from '../../components/Form';
 import Navbar from '../../components/Navbar';
 import './style.css';
 import { validate } from './validate';
-import {logIn} from '../../services/store/actions'
+import { logIn } from '../../services/store/actions';
 
 let data = [
-  { name: 'email', type: 'text', label: 'Enter Email', icon: 'envelope outline icon' },
+  {
+    name: 'email',
+    type: 'text',
+    label: 'Enter Email',
+    icon: 'envelope outline icon',
+  },
   {
     name: 'password',
     type: 'password',
@@ -19,7 +25,7 @@ let data = [
 class Login extends React.Component {
   onSubmit = formvalues => {
     // console.log(formvalues);
-     this.props.logIn(formvalues)
+    this.props.logIn(formvalues);
   };
 
   render() {
@@ -34,10 +40,13 @@ class Login extends React.Component {
                 onSubmit={this.onSubmit}
                 data={data}
                 validate={validate}
-                btnText={'Login'}               
+                btnText={'Login'}
               />
+
               <div className="ui violet message">
-                New to us? <a href="/signup">Sign Up</a>
+                New to us? <Link to="/signup">Sign Up</Link>
+                <div>or</div>
+                <Link to="/forgotPass">Forgot Password</Link>
               </div>
             </div>
           </div>
@@ -47,4 +56,4 @@ class Login extends React.Component {
   }
 }
 
-export default connect(null,{logIn})(Login);
+export default connect(null, { logIn })(Login);
