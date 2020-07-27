@@ -380,7 +380,6 @@ export const updateProfileImage = formValues => {
 /**
  * Send Reset Pass Link
  */
-
 export const sendResetPassLink = formValues => {
   return (dispatch, getState) => {
     api

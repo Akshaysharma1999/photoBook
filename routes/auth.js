@@ -64,7 +64,7 @@ route.post("/resetMailLink", (req, res) => {
         mailHelper(
           "Password Reset",
           "Password Reset Link",
-          `<p>Click to reset password <a href="http://localhost:3000/resetPassword/${token}">here</a><p/>`,
+          `<p>Click to reset password <a href="https://myphotobookapp.herokuapp.com/resetPassword/${token}">here</a><p/>`,
           req.body.mailTo,
           res
         );
@@ -100,7 +100,7 @@ route.post("/signup", (req, res) => {
               mailHelper(
                 "Welcome To photoBook",
                 "Happy you have joined us",
-                "<p>Enjoy Awesom Features <a href=`http://localhost:3000/`>here</a><p/>",
+                "<p>Enjoy Awesom Features <a href=`https://myphotobookapp.herokuapp.com/`>here</a><p/>",
                 req.body.email,
                 null
               );
