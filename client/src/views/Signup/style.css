@@ -1,0 +1,14 @@
+body > .grid {
+  height: 100%;
+}
+.column {
+  max-width: 450px;
+}
+#mycard {
+  padding: 20px;
+  max-width: 400px;
+  margin: 10px auto;
+}
+.message {
+  text-align: center;
+}
