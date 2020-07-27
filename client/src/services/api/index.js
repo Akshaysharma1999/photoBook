@@ -2,7 +2,7 @@ import axios from 'axios';
 import interceptors from '../../utils/interceptors';
 
 let api = axios.create({
-  baseURL: 'http://localhost:5000/',
+  baseURL: 'https://myphotobookapp.herokuapp.com/',
 });
 
 interceptors(api);
