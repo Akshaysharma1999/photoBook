@@ -12,17 +12,17 @@
 * Follow other users.
 * Search Other users.
 
-## Demo
+## Demo:
 
 The site is deployed at https://myphotobookapp.herokuapp.com/
 
-## Built With
+## Built With:
 
 * Nodejs(Express)
 * Mongoose Database(Mongo Db Atlas)
 * React Redux 
 
-## HOW TO RUN ON LOCALHOST
+## How To Run On Localhost :
 
 * Clone The Repository
 
@@ -38,6 +38,6 @@ The site is deployed at https://myphotobookapp.herokuapp.com/
 * view the client on ```http://localhost:3000/```
 
 
-## APP INFO
+## App Info:
 * Created By : Akshay Sharma
 * Version : 1.0.0 
