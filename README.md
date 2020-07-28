@@ -5,9 +5,9 @@
 * Authenticate users via JWT (login/signup pages + logout )
 * Forgot Password feature with mail service.
 * User Profile.
-* CR*D Articles.
-* Like an article.
-* CR** Comments on articles(with photos).
+* CR*D Posts(with photos).
+* Like a Post.
+* CR** Comments on posts.
 * Get feed of followed users.
 * Follow other users.
 * Search Other users.
