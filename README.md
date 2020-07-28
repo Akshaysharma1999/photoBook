@@ -1,4 +1,4 @@
-# photoBook
+# PhotoBook
 
 ## General functionality:
 
@@ -26,12 +26,12 @@ The site is deployed at https://myphotobookapp.herokuapp.com/
 
 * Clone The Repository
 
-* Server
+``` Server```
 * cd server
 * run ```npm install``` to install all dependencies
 * run ```node index.js``` to run the server
 
-* Client
+``` Client ```
 * cd client
 * run ```npm install``` to install all dependencies
 * run ```npm start``` to run the react server
